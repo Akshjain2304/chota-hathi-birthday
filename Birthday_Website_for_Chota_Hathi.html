@@ -1,0 +1,222 @@
+<!--
+File: Birthday_Website_for_Chota_Hathi.html
+How to use:
+1. Save this file as Birthday_Website_for_Chota_Hathi.html in a folder.
+2. Put your assets (gif, images, audio) in a subfolder called `assets`:
+   - assets/gift.gif
+   - assets/img1.jpg
+   - assets/img2.jpg
+   - assets/img3.jpg
+   - assets/song.mp3  (your song file)
+3. Open the file in VS Code and use Live Server (recommended) or open in browser.
+4. Customize texts (search for "CHANGE ME") to personalize.
+
+Features:
+- Mobile + desktop responsive single-page site with sequential "pages" (sections).
+- Cute GIF on first screen, then sequential screens with picture + Hinglish poetry, quotes, and finally a picture with your song.
+- Smooth animations, confetti effect, and a final big "I LOVE YOU" message.
+-->
+
+<!doctype html>
+<html lang="hi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Happy Birthday, Chota Hathi 🎂</title>
+  <style>
+    :root{
+      --bg:#fff0f6; --card:#fff; --accent:#ff6b81; --muted:#6b6b6b;
+      --maxw:900px;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;background:linear-gradient(180deg,#fff8fb,var(--bg));color:#222;display:flex;align-items:center;justify-content:center;min-height:100vh}
+    .wrap{width:100%;max-width:var(--maxw);margin:20px;padding:18px}
+    .card{background:var(--card);border-radius:18px;box-shadow:0 8px 30px rgba(0,0,0,0.08);overflow:hidden}
+    header{padding:18px 22px;display:flex;align-items:center;gap:12px}
+    header h1{margin:0;font-size:20px;color:var(--accent)}
+    .container{padding:12px}
+    .screen{min-height:60vh;padding:28px;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+    .screen.active{display:flex}
+    .gif{width:220px;height:220px;border-radius:16px;overflow:hidden;box-shadow:0 6px 20px rgba(0,0,0,0.08);background:#fff;display:flex;align-items:center;justify-content:center}
+    .gif img{width:100%;height:100%;object-fit:cover}
+    h2{margin:18px 0 8px;font-size:24px}
+    p.lead{font-size:18px;margin:8px 0;color:var(--muted)}
+    .btn{display:inline-block;background:var(--accent);color:white;padding:10px 16px;border-radius:12px;border:0;font-weight:600;cursor:pointer;margin-top:16px;box-shadow:0 6px 18px rgba(255,107,129,0.18)}
+    .img-card{max-width:420px;width:95%;border-radius:16px;overflow:hidden;margin:16px 0;box-shadow:0 8px 30px rgba(0,0,0,0.06)}
+    .img-card img{width:100%;height:auto;display:block}
+    .quote{font-style:italic;padding:12px 18px;background:linear-gradient(90deg,rgba(255,255,255,0.6),rgba(255,255,255,0.4));border-radius:12px;margin-top:8px}
+    footer{padding:12px;text-align:center;color:var(--muted);font-size:13px}
+
+    /* confetti canvas */
+    #confetti{position:fixed;left:0;top:0;pointer-events:none;width:100%;height:100%;z-index:999}
+
+    /* final big message */
+    .final{padding:36px;display:flex;flex-direction:column;align-items:center;gap:14px}
+    .heart{font-size:56px;color:var(--accent);transform:scale(0.8);transition:transform .6s}
+    .heart.pulse{transform:scale(1)}
+
+    /* responsive */
+    @media(min-width:900px){
+      .screen{min-height:60vh}
+      .gif{width:280px;height:280px}
+    }
+  </style>
+</head>
+<body>
+  <canvas id="confetti"></canvas>
+  <div class="wrap">
+    <div class="card">
+      <header>
+        <img src="C:\Users\asus\OneDrive\Desktop\Hathi\Assets\bear-hug-milk-and-mocha-hf385d9fk9mwyh7l.webp" alt="gift" style="width:52px;height:52px;border-radius:10px;object-fit:cover;box-shadow:0 6px 16px rgba(0,0,0,0.06)">
+        <h1>Happy Birthday, <span id="nick">Chota Hathi</span> 🎉</h1>
+      </header>
+
+      <div class="container">
+        <!-- Screen 1: GIF + button -->
+        <section id="s1" class="screen active" aria-labelledby="s1t">
+          <div class="gif"><img src="C:\Users\asus\OneDrive\Desktop\Hathi\Assets\bear-hug-milk-and-mocha-hf385d9fk9mwyh7l.webp" alt="cute gift gif"></div>
+          <h2 id="s1t">Surprise! Aaj ka din bas tera hai</h2>
+          <p class="lead">Click karo aur dekho — ek chhota sa safar tera naam lekar shuru hota hai.</p>
+          <button class="btn" onclick="nextScreen(2)">Open your surprise 💌</button>
+        </section>
+
+        <!-- Screen 2: Pic + Hinglish poetry -->
+        <section id="s2" class="screen" aria-labelledby="s2t">
+          <div class="img-card"><img src="C:\Users\asus\OneDrive\Desktop\Hathi\Assets\1.jpg" alt="pic 1"></div>
+          <h2 id="s2t">Hinglish poetry — CHANGE ME</h2>
+          <p class="lead">Chota Hathi, tu meri pocket‑si khushi — morning wali chai aur late‑night filmi gupshup ka reason. <br> Jab tu hans deti hai, mera world ka brightness 100% ho jata hai. <br>Gusse mein tu ek cute red tomato, par pighalne pe ek gulab si soft — dono hi meri favourite. <br>Saath tere har borrowed gaana original lagta hai — tu mera playlist, mera filmi hero‑heroine. <br>Happy Birthday meri jaan — aaj sirf tera show, main tera biggest fan. ♥️</p>
+          <button class="btn" onclick="nextScreen(3)">Next ❤️</button>
+        </section>
+
+        <!-- Screen 3: Pic + quotes -->
+        <section id="s3" class="screen" aria-labelledby="s3t">
+          <div class="img-card"><img src="C:\Users\asus\OneDrive\Desktop\Hathi\Assets\2.jpg" alt="pic 2"></div>
+          <h2 id="s3t">Thode se quotes</h2>
+          <div class="quote">"Tum ho to sub kuch simple lagta hai — chai, gaana aur tumhara saath."</div>
+          <div class="quote">"Har pal tumse seekha, hansna chhota sa celebrate karna."</div>
+          <button class="btn" onclick="nextScreen(4)">Play our song ▶️</button>
+        </section>
+
+        <!-- Screen 4: Pic + song -->
+        <section id="s4" class="screen" aria-labelledby="s4t">
+          <div class="img-card"><img src="C:\Users\asus\OneDrive\Desktop\Hathi\Assets\3.jpg" alt="pic 3"></div>
+          <h2 id="s4t">Yeh gaana bas humara</h2>
+          <p class="lead">Agar tumhara favorite gaana mera hai, to yeh gaana specially tumhare liye.</p>
+          <audio id="song" controls preload="none">
+            <source src="C:\Users\asus\OneDrive\Desktop\Hathi\Assets\Kuch Swal Hai.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+          </audio>
+          <div style="margin-top:12px">
+            <button class="btn" onclick="showFinal()">Finish with a surprise ✨</button>
+          </div>
+        </section>
+
+        <!-- Final Screen -->
+        <section id="final" class="screen" aria-labelledby="finalt">
+          <div class="final">
+            <div class="heart" id="bigHeart">❤️</div>
+            <h2 id="finalt">Happy Birthday, <span id="nameFinal">Chota Hathi</span>!</h2>
+            <p class="lead" style="font-size:18px; line-height:1.6; text-align:center; padding:0 10px;">
+              Aaj main tujhe ek baat seedhi, simple aur poori duniya ko sunaakar kehna chahta hoon… <br><br>
+              Chota Hathi, tu sirf meri life ka part nahi, tu meri life ka sabse pyaara chapter hai. <br>
+              Teri hasi mere din ka sunshine hai, tera gussa mere liye cute‑sa warning, tera nakhra meri favourite drama, aur tera pyaar… bas woh cheez jiske liye main har din shukar karta hoon. <br><br>
+              Tu chahe kitni bhi childish ho, ya kabhi kabhi thodi mature ban jaati ho — par mere liye tu hamesha sabse special, sabse important aur sabse beautiful person rahegi. <br><br>
+              Main har jagah, har situation, har mood me tere saath rehna chahta hoon — funny moments me tere sath hasna, sad moments me tere liye shoulder banna, aur har birthday pe tujhe feel karwana ki tu meri duniya ka centre hai. <br><br>
+              Aaj, iss special din par, main bas itna kehna chahta hoon…
+            </p>
+            <div style="font-weight:900; font-size:38px; color:var(--accent); margin-top:10px; letter-spacing:1px;">I LOVE YOU 💘</div>
+          </div>
+            <h2 id="finalt">Happy Birthday, <span id="nameFinal">Chota Hathi</span>!</h2>
+            <p class="lead">Aaj ki date: <span id="dateHere"></span> — Isi pal se lekar hamesha tak, I love you zyada se zyada.</p>
+            <div style="font-weight:700;font-size:22px;color:var(--accent)">I LOVE YOU 💘</div>
+          </div>
+        </section>
+
+      </div>
+      <footer>Made with ❤️ — Customize images/audio in the assets folder</footer>
+    </div>
+  </div>
+
+  <script>
+    // CHANGE ME: Set nickname and final name
+    const nickname = 'Chota Hathi';
+    document.getElementById('nick').textContent = nickname;
+    document.getElementById('nameFinal').textContent = nickname;
+
+    // set today's date (user said "kl" = kal/tomorrow — but site uses current date; change if you want tomorrow)
+    const d = new Date();
+    // If you want 'tomorrow', uncomment next line
+    d.setDate(d.getDate() + 1);
+    document.getElementById('dateHere').textContent = d.toLocaleDateString('en-GB');
+
+    // Simple screen navigation
+    function show(id){
+      document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+    function nextScreen(n){
+      show('s'+n);
+      if(n===4) startConfetti(350);
+    }
+    function showFinal(){
+      show('final');
+      pulseHeart();
+      startConfetti(600);
+    }
+
+    // Heart pulse
+    function pulseHeart(){
+      const h = document.getElementById('bigHeart');
+      h.classList.add('pulse');
+      setInterval(()=>{h.classList.toggle('pulse')},700);
+    }
+
+    // CONFETTI (lightweight)
+    function startConfetti(amount){
+      const canvas = document.getElementById('confetti');
+      const ctx = canvas.getContext('2d');
+      let W = canvas.width = window.innerWidth;
+      let H = canvas.height = window.innerHeight;
+      window.addEventListener('resize', ()=>{W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight});
+      const pieces = [];
+      for(let i=0;i<Math.min(amount,800);i++){
+        pieces.push({x:Math.random()*W,y:Math.random()*-H,vy:2+Math.random()*5, size:6+Math.random()*10, color:['#ff6b81','#ffd166','#6bcB77','#9ad0f5'][Math.floor(Math.random()*4)],rot:Math.random()*360,vr:Math.random()*6-3});
+      }
+      let t=0;
+      function update(){
+        ctx.clearRect(0,0,W,H);
+        for(let p of pieces){
+          p.y += p.vy;
+          p.x += Math.sin((t+p.x)*0.01)*1.2;
+          p.rot += p.vr;
+          ctx.save();
+          ctx.translate(p.x,p.y);
+          ctx.rotate(p.rot*Math.PI/180);
+          ctx.fillStyle = p.color;
+          ctx.fillRect(-p.size/2,-p.size/2,p.size,p.size*0.6);
+          ctx.restore();
+          if(p.y>H+50){p.y=-50; p.x=Math.random()*W}
+        }
+        t++;
+        requestAnimationFrame(update);
+      }
+      update();
+      // stop after 12s
+      setTimeout(()=>{ctx.clearRect(0,0,W,H)},12000);
+    }
+
+    // Accessibility: allow Enter to activate primary button on s1
+    document.addEventListener('keydown', e=>{
+      if(e.key==='Enter'){
+        const active = document.querySelector('.screen.active');
+        const btn = active.querySelector('.btn');
+        if(btn) btn.click();
+      }
+    });
+
+    // Small touch: autoplay song when reaching s4 if user interacted
+    document.getElementById('s4').addEventListener('transitionend', ()=>{});
+
+  </script>
+</body>
+</html>
